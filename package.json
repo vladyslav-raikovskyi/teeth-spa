@@ -10,7 +10,7 @@
     "start:prod": "node server.js"
   },
   "engines": {
-    "node": "20.18.0"
+    "node": "20.11.1"
   },
   "private": true,
   "dependencies": {
