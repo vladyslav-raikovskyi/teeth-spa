@@ -1,23 +1,32 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileUploadService {
+  private apiUrl = `${environment.apiUrl}/upload`;
 
-  constructor() { }
+  constructor(private http: HttpClient) {}
 
-  uploadFile(file: File): Observable<{ success: boolean; message: string }> {
-    // Імітуємо затримку мережі
-    return new Observable(observer => {
-      setTimeout(() => {
-        observer.next({
-          success: true,
-          message: `Файл ${file.name} успішно завантажено`
-        });
-        observer.complete();
-      }, 1500);
+  uploadFiles(files: File[]): Observable<number> {
+    const formData = new FormData();
+    files.forEach(file => {
+      formData.append('files', file);
+    });
+
+    return new Observable<number>(observer => {
+      this.http.post<{ message: string }>(this.apiUrl, formData).subscribe({
+        next: () => {
+          observer.next(100);
+          observer.complete();
+        },
+        error: (error) => {
+          observer.error(error);
+        }
+      });
     });
   }
 }

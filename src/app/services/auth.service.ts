@@ -1,34 +1,22 @@
-import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private isAuthenticated = new BehaviorSubject<boolean>(false);
-  isAuthenticated$ = this.isAuthenticated.asObservable();
+  private readonly AUTH_KEY = 'isAuthenticated';
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
+  isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      // Перевіряємо, чи користувач вже авторизований
-      const authStatus = localStorage.getItem('isAuthenticated');
-      if (authStatus === 'true') {
-        this.isAuthenticated.next(true);
-      }
-    }
-  }
+  constructor(private router: Router) {}
 
   login(username: string, password: string): boolean {
-    if (username === 'admin' && password === 'password') {
-      this.isAuthenticated.next(true);
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem('isAuthenticated', 'true');
-      }
+    // Тимчасово: перевіряємо хардкодовані облікові дані
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem(this.AUTH_KEY, 'true');
+      this.isLoggedInSubject.next(true);
       this.router.navigate(['/upload']);
       return true;
     }
@@ -36,10 +24,12 @@ export class AuthService {
   }
 
   logout(): void {
-    this.isAuthenticated.next(false);
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem('isAuthenticated');
-    }
+    localStorage.removeItem(this.AUTH_KEY);
+    this.isLoggedInSubject.next(false);
     this.router.navigate(['/login']);
+  }
+
+  isAuthenticated(): boolean {
+    return localStorage.getItem(this.AUTH_KEY) === 'true';
   }
 }

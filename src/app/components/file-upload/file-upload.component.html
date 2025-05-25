@@ -1,1 +1,66 @@
-<p>file-upload works!</p>
+<div class="upload-container">
+  <mat-card class="upload-card">
+    <mat-card-header>
+      <mat-card-title>Завантаження файлів</mat-card-title>
+      <button mat-icon-button color="warn" class="logout-button" (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="upload-area" 
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event)"
+           [class.drag-over]="isDragging">
+        <input
+          type="file"
+          #fileInput
+          (change)="onFileSelected($event)"
+          multiple
+          style="display: none"
+        />
+        <div class="upload-content">
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <p>Перетягніть файли сюди або</p>
+          <button mat-raised-button color="primary" (click)="fileInput.click()">
+            Виберіть файли
+          </button>
+        </div>
+      </div>
+
+      <div class="file-list" *ngIf="selectedFiles.length > 0">
+        <h3>Вибрані файли:</h3>
+        <div class="file-item" *ngFor="let file of selectedFiles">
+          <span class="file-name">{{ file.name }}</span>
+          <span class="file-size">({{ formatFileSize(file.size) }})</span>
+          <button mat-icon-button color="warn" (click)="removeFile(file)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <mat-progress-bar
+        *ngIf="uploadProgress > 0 && uploadProgress < 100"
+        mode="determinate"
+        [value]="uploadProgress"
+        class="progress-bar">
+      </mat-progress-bar>
+
+      <div class="upload-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="uploadFiles()"
+          [disabled]="selectedFiles.length === 0 || isUploading">
+          Завантажити
+        </button>
+        <button
+          mat-button
+          (click)="clearFiles()"
+          [disabled]="selectedFiles.length === 0 || isUploading">
+          Очистити
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

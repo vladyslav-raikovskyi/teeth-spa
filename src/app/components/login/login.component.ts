@@ -1,41 +1,65 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule
+  ],
   template: `
     <div class="login-container">
-      <div class="login-box">
-        <h2>Вхід в систему</h2>
-        <form (ngSubmit)="onSubmit()">
-          <div class="form-group">
-            <label for="username">Ім'я користувача:</label>
-            <input
-              type="text"
-              id="username"
-              [(ngModel)]="username"
-              name="username"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label for="password">Пароль:</label>
-            <input
-              type="password"
-              id="password"
-              [(ngModel)]="password"
-              name="password"
-              required
-            />
-          </div>
-          <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
-          <button type="submit">Увійти</button>
-        </form>
-      </div>
+      <mat-card class="login-card">
+        <mat-card-header>
+          <mat-card-title>Вхід в систему</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Ім'я користувача</mat-label>
+              <input matInput formControlName="username" required>
+              <mat-icon matSuffix>person</mat-icon>
+              <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+                Ім'я користувача обов'язкове
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Пароль</mat-label>
+              <input matInput type="password" formControlName="password" required>
+              <mat-icon matSuffix>lock</mat-icon>
+              <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+                Пароль обов'язковий
+              </mat-error>
+            </mat-form-field>
+
+            <div class="error-message" *ngIf="errorMessage">
+              {{ errorMessage }}
+            </div>
+
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="loginForm.invalid" class="full-width">
+              Увійти
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
     </div>
   `,
   styles: [`
@@ -43,60 +67,57 @@ import { AuthService } from '../../services/auth.service';
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
       background-color: #f5f5f5;
+      padding: 20px;
     }
-    .login-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      width: 100%;
+    .login-card {
       max-width: 400px;
-    }
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    input {
       width: 100%;
-      padding: 0.5rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+      padding: 20px;
     }
-    button {
+    .full-width {
       width: 100%;
-      padding: 0.75rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      margin-bottom: 16px;
     }
-    button:hover {
-      background-color: #0056b3;
+    .error-message {
+      color: #f44336;
+      margin-bottom: 16px;
+      font-size: 14px;
     }
-    .error {
-      color: red;
-      margin-bottom: 1rem;
+    mat-card-header {
+      margin-bottom: 20px;
+    }
+    mat-card-title {
+      font-size: 24px;
+      margin-bottom: 20px;
     }
   `]
 })
 export class LoginComponent {
-  username: string = '';
-  password: string = '';
+  loginForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
 
   onSubmit(): void {
-    if (this.authService.login(this.username, this.password)) {
-      this.errorMessage = '';
-    } else {
-      this.errorMessage = 'Невірне ім\'я користувача або пароль';
+    if (this.loginForm.valid) {
+      const { username, password } = this.loginForm.value;
+      if (this.authService.login(username, password)) {
+        this.errorMessage = '';
+        this.router.navigate(['/upload']);
+      } else {
+        this.errorMessage = 'Невірне ім\'я користувача або пароль';
+      }
     }
   }
 }
