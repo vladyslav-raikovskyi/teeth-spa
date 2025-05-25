@@ -10,7 +10,6 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/teeth-spa/browser/index.html'));
 });
 
-// Визначаємо порт для Heroku
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

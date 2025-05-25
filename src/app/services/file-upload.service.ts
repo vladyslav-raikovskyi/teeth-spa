@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -11,21 +12,24 @@ export class FileUploadService {
 
   constructor(private http: HttpClient) {}
 
-  uploadFiles(files: File[]): Observable<number> {
+  uploadFile(file: File, progressCallback: (progress: number) => void): Promise<void> {
     const formData = new FormData();
-    files.forEach(file => {
-      formData.append('files', file);
-    });
+    formData.append('file', file);
 
-    return new Observable<number>(observer => {
-      this.http.post<{ message: string }>(this.apiUrl, formData).subscribe({
-        next: () => {
-          observer.next(100);
-          observer.complete();
+    return new Promise((resolve, reject) => {
+      this.http.post(this.apiUrl, formData, {
+        reportProgress: true,
+        observe: 'events'
+      }).subscribe({
+        next: (event: HttpEvent<any>) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            const progress = Math.round(100 * event.loaded / (event.total || event.loaded));
+            progressCallback(progress);
+          } else if (event.type === HttpEventType.Response) {
+            resolve();
+          }
         },
-        error: (error) => {
-          observer.error(error);
-        }
+        error: (error) => reject(error)
       });
     });
   }

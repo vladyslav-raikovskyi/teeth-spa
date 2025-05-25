@@ -93,34 +93,38 @@ export class FileUploadComponent implements OnInit {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   }
 
-  uploadFiles(): void {
+  async uploadFiles(): Promise<void> {
     if (this.selectedFiles.length === 0) return;
 
     this.isUploading = true;
     this.uploadProgress = 0;
 
-    this.fileUploadService.uploadFiles(this.selectedFiles).subscribe({
-      next: (progress) => {
-        this.uploadProgress = progress;
-      },
-      error: (error) => {
-        this.snackBar.open('Помилка при завантаженні файлів', 'Закрити', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
+    try {
+      for (const file of this.selectedFiles) {
+        await this.fileUploadService.uploadFile(file, (progress) => {
+          this.uploadProgress = progress;
         });
-        this.isUploading = false;
-      },
-      complete: () => {
-        this.snackBar.open('Файли успішно завантажено', 'Закрити', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom'
-        });
-        this.clearFiles();
-        this.isUploading = false;
       }
-    });
+      
+      this.snackBar.open('Файли успішно завантажено!', 'Закрити', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['success-snackbar']
+      });
+      
+      this.selectedFiles = [];
+      this.uploadProgress = 0;
+    } catch (error) {
+      this.snackBar.open('Помилка при завантаженні файлів', 'Закрити', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+        panelClass: ['error-snackbar']
+      });
+    } finally {
+      this.isUploading = false;
+    }
   }
 
   logout(): void {

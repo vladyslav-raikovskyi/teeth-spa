@@ -271,3 +271,22 @@ html, body {
   margin-top: 8px;
   font-size: 14px;
 }
+
+/* Стилі для сповіщень */
+.success-snackbar {
+  background: #4caf50;
+  color: white;
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
+
+.error-snackbar {
+  background: #f44336;
+  color: white;
+  
+  .mat-simple-snackbar-action {
+    color: white;
+  }
+}
