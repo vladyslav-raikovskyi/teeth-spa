@@ -3,10 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
 
 @Component({
   selector: 'app-root',
@@ -17,14 +16,10 @@ import { AuthService } from './services/auth.service';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    MatSidenavModule,
-    MatListModule
+    BottomNavComponent
   ],
   template: `
     <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
       <span>Teeth Spa</span>
       <span class="spacer"></span>
       <button mat-icon-button *ngIf="isLoggedIn" (click)="logout()">
@@ -32,22 +27,10 @@ import { AuthService } from './services/auth.service';
       </button>
     </mat-toolbar>
 
-    <mat-sidenav-container>
-      <mat-sidenav #sidenav mode="side" [opened]="isLoggedIn">
-        <mat-nav-list>
-          <a mat-list-item routerLink="/upload" *ngIf="isLoggedIn">
-            <mat-icon matListItemIcon>cloud_upload</mat-icon>
-            <span matListItemTitle>Завантаження файлів</span>
-          </a>
-        </mat-nav-list>
-      </mat-sidenav>
-
-      <mat-sidenav-content>
-        <div class="content">
-          <router-outlet></router-outlet>
-        </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+    <app-bottom-nav></app-bottom-nav>
   `,
   styles: [`
     :host {
@@ -58,15 +41,10 @@ import { AuthService } from './services/auth.service';
     .spacer {
       flex: 1 1 auto;
     }
-    mat-sidenav-container {
+    .content-container {
       flex: 1;
-    }
-    mat-sidenav {
-      width: 250px;
-    }
-    .content {
       padding: 20px;
-      height: 100%;
+      background-color: #f5f5f5;
     }
   `]
 })
