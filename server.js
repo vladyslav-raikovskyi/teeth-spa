@@ -7,7 +7,7 @@ app.use(express.static(path.join(__dirname, 'dist/teeth-spa/browser')));
 
 // Всі GET запити перенаправляємо на index.html
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/teeth-spa/browser/index.html'));
+  res.sendFile(path.join(__dirname, 'dist/teeth-spa/browser/index.csr.html'));
 });
 
 // Визначаємо порт для Heroku

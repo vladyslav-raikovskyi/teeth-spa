@@ -4,13 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "start:prod": "node server.js"
   },
   "engines": {
-    "node": "20.x"
+    "node": "20.10.0"
   },
   "private": true,
   "dependencies": {
