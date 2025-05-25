@@ -24,6 +24,7 @@ html, body {
   height: 100%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  overflow-x: hidden;
 }
 
 * {
@@ -48,4 +49,190 @@ html, body {
     font-weight: 500;
     margin-bottom: 0.5rem;
   }
+}
+
+/* Базові стилі для всіх пристроїв */
+.container {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Медіа-запити для різних розмірів екранів */
+/* Мобільні пристрої (до 600px) */
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 8px;
+  }
+
+  h1 {
+    font-size: 24px !important;
+  }
+
+  h2 {
+    font-size: 20px !important;
+  }
+
+  .mat-card {
+    margin: 8px 0;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .mat-button {
+    width: 100%;
+    margin: 8px 0;
+  }
+}
+
+/* Планшети (600px - 960px) */
+@media screen and (min-width: 601px) and (max-width: 960px) {
+  .container {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 28px !important;
+  }
+
+  h2 {
+    font-size: 24px !important;
+  }
+
+  .mat-card {
+    margin: 12px 0;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+}
+
+/* Десктопи (більше 960px) */
+@media screen and (min-width: 961px) {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  h1 {
+    font-size: 32px !important;
+  }
+
+  h2 {
+    font-size: 28px !important;
+  }
+
+  .mat-card {
+    margin: 16px 0;
+  }
+}
+
+/* Стилі для форм */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Стилі для кнопок */
+.button-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Стилі для карток */
+.mat-card {
+  transition: transform 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Стилі для навігації */
+.nav-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+/* Стилі для контенту */
+.content-container {
+  margin-top: 64px; /* Висота навігаційного бару */
+  padding: 16px;
+}
+
+/* Стилі для сповіщень */
+.snackbar-container {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+/* Стилі для завантаження файлів */
+.upload-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.upload-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+
+  &:hover {
+    border-color: mat.get-color-from-palette(mat.$indigo-palette, 500);
+  }
+}
+
+/* Стилі для списку файлів */
+.file-list {
+  margin-top: 16px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+/* Стилі для прогрес-бару */
+.progress-container {
+  margin-top: 16px;
+}
+
+/* Стилі для повідомлень про помилки */
+.error-message {
+  color: mat.get-color-from-palette(mat.$red-palette, 500);
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* Стилі для успішних повідомлень */
+.success-message {
+  color: mat.get-color-from-palette(mat.$green-palette, 500);
+  margin-top: 8px;
+  font-size: 14px;
 }
