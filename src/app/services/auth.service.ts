@@ -14,7 +14,7 @@ export class AuthService {
 
   login(username: string, password: string): boolean {
     // Тимчасово: перевіряємо хардкодовані облікові дані
-    if (username === 'admin' && password === 'admin') {
+    if (username === 'admin' && password === 'password') {
       localStorage.setItem(this.AUTH_KEY, 'true');
       this.isLoggedInSubject.next(true);
       this.router.navigate(['/upload']);
@@ -28,6 +28,9 @@ export class AuthService {
     this.isLoggedInSubject.next(false);
     this.router.navigate(['/login']);
   }
+
+
+
 
   isAuthenticated(): boolean {
     return localStorage.getItem(this.AUTH_KEY) === 'true';
