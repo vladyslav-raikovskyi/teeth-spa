@@ -23,6 +23,11 @@ envFiles.forEach(file => {
       } else {
         console.log(`   ⚠️  apiUrl не знайдено`);
       }
+      if (content.includes('apiPassword')) {
+        console.log(`   🔐 apiPassword знайдено`);
+      } else {
+        console.log(`   ⚠️  apiPassword не знайдено`);
+      }
     } catch (error) {
       console.log(`   ❌ Помилка читання файлу: ${error.message}`);
     }
@@ -33,6 +38,12 @@ envFiles.forEach(file => {
 
 console.log('\n📋 Поточна конфігурація:');
 console.log('- Розробка: http://localhost:8000');
-console.log('- Продакшн: https://your-production-api-url.com (потрібно оновити)');
+console.log('- Продакшн: використовує змінні середовища API_URL та API_PASSWORD');
 
-console.log('\n💡 Для зміни URL API відредагуйте відповідні файли в src/environments/'); 
+console.log('\n🔧 Змінні середовища для Railway:');
+console.log('- API_URL: URL вашого API сервера');
+console.log('- API_PASSWORD: пароль для авторизації API (опціонально)');
+console.log('- NODE_ENV: production');
+console.log('- PORT: 8080');
+
+console.log('\n💡 Для зміни URL API або пароля встановіть змінні середовища в Railway Dashboard'); 

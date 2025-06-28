@@ -2,6 +2,8 @@
 # Етап 1: Збірка додатку
 FROM node:22.16.0-alpine AS builder
 
+ARG API_URL
+ARG API_PASSWORD
 # Встановлюємо робочу директорію
 WORKDIR /app
 

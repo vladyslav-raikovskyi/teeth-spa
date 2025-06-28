@@ -7,7 +7,7 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-  private env_password = `${environment.password}`;
+  private env_password = `${environment.apiPassword}`;
   private readonly AUTH_KEY = 'isAuthenticated';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
