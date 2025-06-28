@@ -42,6 +42,10 @@ Thumbs.db
 Dockerfile
 .dockerignore
 
+# Railway
+railway.json
+RAILWAY_DEPLOYMENT.md
+
 # Документація
 README.md
 ENVIRONMENT_SETUP.md
