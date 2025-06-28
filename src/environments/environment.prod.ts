@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: process.env['API_URL'] || 'https://your-production-api-url.com',
-  apiPassword: process.env['API_PASSWORD'] || ''
+  apiUrl: 'API_URL_PLACEHOLDER',
+  apiPassword: 'API_PASSWORD_PLACEHOLDER'
 };

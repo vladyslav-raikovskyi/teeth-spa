@@ -3,7 +3,10 @@
 FROM node:22.16.0-alpine AS builder
 
 ARG API_URL
+ENV API_URL=${API_URL}
 ARG API_PASSWORD
+ENV API_PASSWORD=${API_PASSWORD}
+
 # Встановлюємо робочу директорію
 WORKDIR /app
 
