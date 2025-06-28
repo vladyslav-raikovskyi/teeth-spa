@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private env_password = `${environment.password}`;
   private readonly AUTH_KEY = 'isAuthenticated';
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
   isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -14,7 +16,7 @@ export class AuthService {
 
   login(username: string, password: string): boolean {
     // Тимчасово: перевіряємо хардкодовані облікові дані
-    if (username === 'admin' && password === 'password') {
+    if (username === 'admin' && password === this.env_password) {
       localStorage.setItem(this.AUTH_KEY, 'true');
       this.isLoggedInSubject.next(true);
       this.router.navigate(['/upload']);

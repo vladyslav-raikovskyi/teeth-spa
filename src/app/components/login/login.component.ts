@@ -27,7 +27,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
     <div class="login-container">
       <mat-card class="login-card">
         <mat-card-header>
-          <mat-card-title>Вхід в систему</mat-card-title>
+          <mat-card-title>Вхід в додаток</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -53,7 +53,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
               {{ errorMessage }}
             </div>
 
-            <button mat-raised-button color="primary" type="submit" 
+            <button mat-raised-button color="primary" type="submit"
                     [disabled]="loginForm.invalid" class="full-width">
               Увійти
             </button>

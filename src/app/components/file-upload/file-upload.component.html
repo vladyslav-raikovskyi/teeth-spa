@@ -5,14 +5,14 @@
     </mat-card-header>
 
     <mat-card-content>
-      <div class="upload-area" 
+      <div class="upload-area"
            (dragover)="onDragOver($event)"
            (dragleave)="onDragLeave($event)"
            (drop)="onDrop($event)"
            [class.drag-over]="isDragging"
            (click)="fileInput.click()">
         <mat-icon class="upload-icon">cloud_upload</mat-icon>
-        <p>Перетягніть файли сюди або натисніть для вибору</p>
+        <p>Перетягніть файли сюди або натисніть щоб загрузити файл для сканування</p>
         <input #fileInput type="file" multiple (change)="onFileSelected($event)" style="display: none">
       </div>
 
@@ -36,14 +36,14 @@
     </mat-card-content>
 
     <mat-card-actions class="button-container">
-      <button mat-raised-button color="primary" 
-              (click)="uploadFiles()" 
+      <button mat-raised-button color="primary"
+              (click)="uploadFiles()"
               [disabled]="selectedFiles.length === 0 || isUploading">
         <mat-icon>cloud_upload</mat-icon>
         Завантажити
       </button>
-      <button mat-button color="warn" 
-              (click)="clearFiles()" 
+      <button mat-button color="warn"
+              (click)="clearFiles()"
               [disabled]="selectedFiles.length === 0 || isUploading">
         <mat-icon>clear</mat-icon>
         Очистити
@@ -51,3 +51,10 @@
     </mat-card-actions>
   </mat-card>
 </div>
+
+<!-- Модальне вікно з результатами аналізу -->
+<app-analysis-result-modal
+  *ngIf="showResultsModal"
+  [results]="analysisResults"
+  (closeModal)="closeResultsModal()">
+</app-analysis-result-modal>

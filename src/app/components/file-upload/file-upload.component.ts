@@ -8,6 +8,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AnalysisResultModalComponent } from '../analysis-result-modal/analysis-result-modal.component';
+import { ToothAnalysis } from '../../models/analysis-result.interface';
 
 @Component({
   selector: 'app-file-upload',
@@ -18,7 +20,8 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatProgressBarModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    AnalysisResultModalComponent
   ],
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss']
@@ -28,6 +31,8 @@ export class FileUploadComponent implements OnInit {
   isDragging = false;
   uploadProgress = 0;
   isUploading = false;
+  showResultsModal = false;
+  analysisResults: ToothAnalysis[] = [];
 
   constructor(
     private fileUploadService: FileUploadService,
@@ -101,9 +106,12 @@ export class FileUploadComponent implements OnInit {
 
     try {
       for (const file of this.selectedFiles) {
-        await this.fileUploadService.uploadFile(file, (progress) => {
+        const results = await this.fileUploadService.uploadFile(file, (progress) => {
           this.uploadProgress = progress;
         });
+        
+        // Зберігаємо результати для відображення
+        this.analysisResults = results;
       }
       
       this.snackBar.open('Файли успішно завантажено!', 'Закрити', {
@@ -112,6 +120,9 @@ export class FileUploadComponent implements OnInit {
         verticalPosition: 'bottom',
         panelClass: ['success-snackbar']
       });
+      
+      // Показуємо модальне вікно з результатами
+      this.showResultsModal = true;
       
       this.selectedFiles = [];
       this.uploadProgress = 0;
@@ -125,6 +136,11 @@ export class FileUploadComponent implements OnInit {
     } finally {
       this.isUploading = false;
     }
+  }
+
+  closeResultsModal(): void {
+    this.showResultsModal = false;
+    this.analysisResults = [];
   }
 
   logout(): void {
